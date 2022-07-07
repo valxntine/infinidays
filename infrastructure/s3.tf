@@ -1,7 +1,26 @@
 resource "aws_s3_bucket" "frontend" {
   bucket = "infinidays-frontend"
-  acl    = "public-read"
 
+  tags = {
+    Name = "infinidays-frontend"
+  }
+}
+
+resource "aws_s3_bucket_website_configuration" "frontend" {
+  bucket = aws_s3_bucket.frontend.bucket
+
+  index_document {
+    suffix = "index.html"
+  }
+}
+
+resource "aws_s3_bucket_acl" "frontend" {
+  bucket = aws_s3_bucket.frontend.id
+  acl    = "public-read"
+}
+
+resource "aws_s3_bucket_policy" "frontend" {
+  bucket = aws_s3_bucket.frontend.id
   policy = jsonencode({
     "Version" : "2012-10-17",
     "Statement" : [
@@ -14,14 +33,4 @@ resource "aws_s3_bucket" "frontend" {
       }
     ]
   })
-
-
-  website {
-    index_document = "index.html"
-  }
-
-  tags = {
-    Name = "infinidays-frontend"
-  }
 }
-
