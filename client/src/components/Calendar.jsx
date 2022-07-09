@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
-import { ArrowLeftIcon, ArrowRightIcon, RefreshIcon } from "@heroicons/react/solid";
+import {
+    ArrowLeftIcon,
+    ArrowRightIcon,
+    PlusIcon,
+    RefreshIcon,
+} from "@heroicons/react/solid";
 import { classNames } from "../utils/classnames";
 import { eventClass } from "../utils/eventclass";
 
@@ -15,12 +20,12 @@ const monthNames = [
     "September",
     "October",
     "November",
-    "December"
+    "December",
 ];
 
 const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-const Calendar = ({ events }) => {
+const Calendar = ({ events, modalHandler }) => {
     const date = new Date();
     const [month, setMonth] = useState(date.getMonth());
     const [year, setYear] = useState(date.getFullYear());
@@ -36,7 +41,7 @@ const Calendar = ({ events }) => {
 
     const calculateAndSetNumberOfDays = () => {
         let i;
-        let daysInMonth = new Date(year, month+1,  0).getDate();
+        let daysInMonth = new Date(year, month + 1, 0).getDate();
 
         // find where to start calendar day of week
         let dayOfWeek = new Date(year, month).getDay();
@@ -62,24 +67,24 @@ const Calendar = ({ events }) => {
     const themes = [
         {
             value: "blue",
-            label: "Blue Theme"
+            label: "Blue Theme",
         },
         {
             value: "red",
-            label: "Red Theme"
+            label: "Red Theme",
         },
         {
             value: "yellow",
-            label: "Yellow Theme"
+            label: "Yellow Theme",
         },
         {
             value: "green",
-            label: "Green Theme"
+            label: "Green Theme",
         },
         {
             value: "purple",
-            label: "Purple Theme"
-        }
+            label: "Purple Theme",
+        },
     ];
     const buttonClass = (limit) => {
         return classNames(
@@ -89,9 +94,9 @@ const Calendar = ({ events }) => {
     };
 
     const nextMonth = () => {
-        if(month === 11) {
-            setMonth(1)
-            setYear(year + 1)
+        if (month === 11) {
+            setMonth(1);
+            setYear(year + 1);
         } else {
             setMonth(month + 1);
         }
@@ -99,15 +104,14 @@ const Calendar = ({ events }) => {
     };
 
     const previousMonth = () => {
-        if(month === 0) {
-            setMonth(11)
-            setYear(year - 1)
+        if (month === 0) {
+            setMonth(11);
+            setYear(year - 1);
         } else {
             setMonth(month - 1);
         }
         calculateAndSetNumberOfDays();
     };
-
 
     return (
         <>
@@ -115,38 +119,53 @@ const Calendar = ({ events }) => {
                 <div className="bg-white rounded-lg shadow overflow-hidden">
                     <div className="flex items-center justify-between px-6 py-4 border-b">
                         <div>
-              <span className="text-lg font-bold text-gray-800">
-                {monthNames[month]}
-              </span>
+                            <span className="text-lg font-bold text-gray-800">
+                                {monthNames[month]}
+                            </span>
                             <span className="ml-1 text-lg text-gray-600 font-normal">
-                {year}
-              </span>
+                                {year}
+                            </span>
                         </div>
                         <div className="flex end justify-center content-center">
-                        <div className="border rounded-lg px-1 pt-1 mr-2">
-                            <button className="leading-none rounded-lg transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-200 p-1 items-center focus:outline-none">
-                            <RefreshIcon className="h-5 w-5 text-gray-500 inline-flex leading-none"/>
-                            </button>
-                        </div>
-                        <div className="border rounded-lg px-1 pt-1">
-                            {/* Previous Month Button */}
-                            <button
-                                type="button"
-                                onClick={() => previousMonth()}
-                                className={"leading-none rounded-lg transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-200 p-1 items-center focus:outline-none"}
-                            >
-                                <ArrowLeftIcon className="h-6 w-6 text-gray-500 inline-flex leading-none" />
-                            </button>
-                            <div className="border-r inline-flex h-6" />
-                            {/* Next Month Button */}
-                            <button
-                                type="button"
-                                onClick={() => nextMonth()}
-                                className={"leading-none rounded-lg transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-200 p-1 items-center focus:outline-none"}
-                            >
-                                <ArrowRightIcon className="h-6 w-6 text-gray-500 inline-flex leading-none" />
-                            </button>
-                        </div>
+                            <div className="border rounded-lg px-1 pt-1 mr-2">
+                                <button
+                                    className="leading-none rounded-lg transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-200 p-1 items-center focus:outline-none"
+                                    onClick={modalHandler}
+                                >
+                                    <PlusIcon className="h-5 w-5 text-gray-500 inline-flex leading-none" />
+                                    <p className="ml-1 text-md text-gray-600 font-normal">
+                                        New Request
+                                    </p>
+                                </button>
+                            </div>
+                            <div className="border rounded-lg px-1 pt-1 mr-2">
+                                <button className="leading-none rounded-lg transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-200 p-1 items-center focus:outline-none">
+                                    <RefreshIcon className="h-5 w-5 text-gray-500 inline-flex leading-none" />
+                                </button>
+                            </div>
+                            <div className="border rounded-lg px-1 pt-1">
+                                {/* Previous Month Button */}
+                                <button
+                                    type="button"
+                                    onClick={() => previousMonth()}
+                                    className={
+                                        "leading-none rounded-lg transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-200 p-1 items-center focus:outline-none"
+                                    }
+                                >
+                                    <ArrowLeftIcon className="h-6 w-6 text-gray-500 inline-flex leading-none" />
+                                </button>
+                                <div className="border-r inline-flex h-6" />
+                                {/* Next Month Button */}
+                                <button
+                                    type="button"
+                                    onClick={() => nextMonth()}
+                                    className={
+                                        "leading-none rounded-lg transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-200 p-1 items-center focus:outline-none"
+                                    }
+                                >
+                                    <ArrowRightIcon className="h-6 w-6 text-gray-500 inline-flex leading-none" />
+                                </button>
+                            </div>
                         </div>
                     </div>
                     <div className="-mx-1 -mb-1">
@@ -185,30 +204,55 @@ const Calendar = ({ events }) => {
                                         {date}
                                     </div>
                                     <span className="float-right text-xs opacity-30">
-                                        {events.filter(
-                                            (e) =>
-                                            new Date(e.event_date).toDateString() ===
-                                            new Date(year, month, date).toDateString() 
-                                        ).length}
+                                        {
+                                            events.filter(
+                                                (e) =>
+                                                    new Date(
+                                                        e.event_date
+                                                    ).toDateString() ===
+                                                    new Date(
+                                                        year,
+                                                        month,
+                                                        date
+                                                    ).toDateString()
+                                            ).length
+                                        }
                                     </span>
 
-                                    <div className="overflow-y-auto mt-1 h-20">
+                                    <div className="overflow-y-auto mt-1 h-20 flex-col ">
                                         {events
                                             .filter(
                                                 (e) =>
-                                                    new Date(e.event_date).toDateString() ===
-                                                    new Date(year, month, date).toDateString()
+                                                    new Date(
+                                                        e.event_date
+                                                    ).toDateString() ===
+                                                    new Date(
+                                                        year,
+                                                        month,
+                                                        date
+                                                    ).toDateString()
                                             )
                                             .map((e) => (
                                                 <div
                                                     key={e.user_name}
                                                     className={classNames(
-                                                        eventClass(e.event_theme),
+                                                        eventClass(
+                                                            e.event_theme
+                                                        ),
+                                                        e.pending
+                                                            ? "opacity-30"
+                                                            : "",
+                                                        e.halfDay === "am"
+                                                            ? "w-1/2"
+                                                            : "",
+                                                        e.halfDay === "pm"
+                                                            ? "w-1/2 ml-auto"
+                                                            : "",
                                                         "px-1 py-1 rounded-lg overflow-hidden border"
                                                     )}
                                                 >
-                                                    <p className="text-sm leading-tight">
-                                                    
+                                                    <p className="text-[0.75em] leading-[0.5em] text-center">
+                                                        {e.pending && "pending"}
                                                     </p>
                                                 </div>
                                             ))}
