@@ -7,6 +7,7 @@ import {
 } from "@heroicons/react/solid";
 import { classNames } from "../utils/classnames";
 import { eventClass } from "../utils/eventclass";
+import { getDatesInRange } from "../utils/getrangeofdates";
 
 const monthNames = [
     "January",
@@ -25,7 +26,7 @@ const monthNames = [
 
 const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-const Calendar = ({ events, modalHandler }) => {
+export const Calendar = ({ events, modalHandler }) => {
     const date = new Date();
     const [month, setMonth] = useState(date.getMonth());
     const [year, setYear] = useState(date.getFullYear());
@@ -63,35 +64,6 @@ const Calendar = ({ events, modalHandler }) => {
         calculateAndSetNumberOfDays();
         console.log(month, year);
     }, [month]);
-
-    const themes = [
-        {
-            value: "blue",
-            label: "Blue Theme",
-        },
-        {
-            value: "red",
-            label: "Red Theme",
-        },
-        {
-            value: "yellow",
-            label: "Yellow Theme",
-        },
-        {
-            value: "green",
-            label: "Green Theme",
-        },
-        {
-            value: "purple",
-            label: "Purple Theme",
-        },
-    ];
-    const buttonClass = (limit) => {
-        return classNames(
-            month === limit ? "cursor-not-allowed opacity-25" : "",
-            "leading-none rounded-lg transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-200 p-1 items-center focus:outline-none"
-        );
-    };
 
     const nextMonth = () => {
         if (month === 11) {
@@ -197,8 +169,8 @@ const Calendar = ({ events, modalHandler }) => {
                                         className={classNames(
                                             isToday(date)
                                                 ? "bg-orange-600 text-white"
-                                                : "text-gray-700 hover:bg-orange-200",
-                                            "inline-flex w-6 h-6 items-center justify-center cursor-pointer text-center leading-none rounded-full transition ease-in-out duration-100"
+                                                : "text-gray-700",
+                                            "inline-flex w-6 h-6 items-center cursor-default justify-center text-center leading-none rounded-full transition ease-in-out duration-100"
                                         )}
                                     >
                                         {date}
@@ -208,7 +180,7 @@ const Calendar = ({ events, modalHandler }) => {
                                             events.filter(
                                                 (e) =>
                                                     new Date(
-                                                        e.event_date
+                                                        e.event_epoch
                                                     ).toDateString() ===
                                                     new Date(
                                                         year,
@@ -224,7 +196,7 @@ const Calendar = ({ events, modalHandler }) => {
                                             .filter(
                                                 (e) =>
                                                     new Date(
-                                                        e.event_date
+                                                        e.event_epoch
                                                     ).toDateString() ===
                                                     new Date(
                                                         year,
@@ -242,10 +214,12 @@ const Calendar = ({ events, modalHandler }) => {
                                                         e.pending
                                                             ? "opacity-30"
                                                             : "",
-                                                        e.halfDay === "am"
+                                                        e.morningHalfDay ===
+                                                            true
                                                             ? "w-1/2"
                                                             : "",
-                                                        e.halfDay === "pm"
+                                                        e.afternoonHalfDay ===
+                                                            true
                                                             ? "w-1/2 ml-auto"
                                                             : "",
                                                         "px-1 py-1 rounded-lg overflow-hidden border"
@@ -266,5 +240,3 @@ const Calendar = ({ events, modalHandler }) => {
         </>
     );
 };
-
-export default Calendar;

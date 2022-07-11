@@ -13,7 +13,7 @@ const navigation = [
     { name: "My Profile", href: "profile" },
 ];
 
-export const Navbar = () => {
+export const Navbar = ({ user }) => {
     return (
         <Disclosure as="nav" className="bg-zinc-800">
             {({ open }) => (
@@ -63,20 +63,8 @@ export const Navbar = () => {
                             </div>
                             <div className="hidden md:block">
                                 <div className="flex items-center justify-between space-x-3">
-                                    <button
-                                        type="button"
-                                        className="bg-zinc-800 p-1 rounded-full text-zinc-400 hover:text-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-zinc-800 focus:ring-white"
-                                    >
-                                        <span className="sr-only">
-                                            View notifications
-                                        </span>
-                                        <BellIcon
-                                            className="h-6 w-6"
-                                            aria-hidden="true"
-                                        />
-                                    </button>
                                     <div className="text-sm font-medium leading-none text-zinc-400">
-                                        Sign Out
+                                        {user.name}
                                     </div>
 
                                     {/* Profile dropdown */}
@@ -132,18 +120,6 @@ export const Navbar = () => {
                                         Sign Out
                                     </div>
                                 </div>
-                                <button
-                                    type="button"
-                                    className="ml-auto bg-zinc-800 flex-shrink-0 p-1 rounded-full text-zinc-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-zinc-800 focus:ring-white"
-                                >
-                                    <span className="sr-only">
-                                        View notifications
-                                    </span>
-                                    <BellIcon
-                                        className="h-6 w-6"
-                                        aria-hidden="true"
-                                    />
-                                </button>
                             </div>
                         </div>
                     </Disclosure.Panel>
