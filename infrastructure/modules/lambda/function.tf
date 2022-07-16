@@ -53,7 +53,7 @@ resource "aws_lambda_function_url" "main" {
   ]
 
   cors {
-    allow_origins     = ["http://infinidays-frontend.s3-website.eu-west-2.amazonaws.com"]
+    allow_origins     = ["http://infinidays-frontend.s3-website.eu-west-2.amazonaws.com", "http://localhost:3000"]
     allow_methods     = ["GET"]
     allow_headers     = ["date", "keep-alive"]
     expose_headers    = ["keep-alive", "date"]
