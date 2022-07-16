@@ -107,4 +107,7 @@ dist
 .terraform/
 terraform.tfstate*
 
+# Lambda zips
+*.zip
+
 .DS_Store

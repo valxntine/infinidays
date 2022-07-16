@@ -1,9 +1,15 @@
+const defaultTheme = require("tailwindcss/defaultTheme");
+
 module.exports = {
-    content: [
-        "./src/**/*.{js,jsx}"
-    ],
+    content: ["./src/**/*.{js,jsx}"],
     theme: {
-        extend: {},
+        extend: {
+            fontFamily: {
+                sans: ["Roboto", ...defaultTheme.fontFamily.sans],
+            },
+        },
     },
-    plugins: [],
-}
+    plugins: [
+        require('@tailwindcss/forms'),
+    ],
+};
