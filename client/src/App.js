@@ -121,7 +121,7 @@ export default function Example() {
 
     const updateEvents = (event) => {
         const currEvents = [...events]
-        setEvents([... currEvents, event])
+        setEvents([...currEvents, event])
     }
 
     const deleteEvent = (id) => {
