@@ -1,5 +1,6 @@
-export const eventClass = (t) => {
-    switch (t) {
+export const eventClass = (e) => {
+    if (e.pending) { return `border-${e.event_theme}-400 text-${e.event_theme}-800 bg-white`}
+    switch (e.event_theme) {
         case "blue":
             return "border-blue-400 text-blue-800 bg-blue-300";
         case "red":

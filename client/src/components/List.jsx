@@ -4,7 +4,6 @@ import { getTeams } from "../db/getTeams";
 
 const List = () => {
     const { isLoading, isError, data, error } = useQuery("team", getTeams);
-    console.log(data);
     if (isError) {
         return <p>{error}</p>;
     }

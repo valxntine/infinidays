@@ -2,12 +2,11 @@ import { useEffect, useState } from "react";
 import {
     ArrowLeftIcon,
     ArrowRightIcon,
-    PlusIcon,
     RefreshIcon,
 } from "@heroicons/react/solid";
 import { classNames } from "../utils/classnames";
 import { eventClass } from "../utils/eventclass";
-import { getDatesInRange } from "../utils/getrangeofdates";
+import { NewRequestButton } from "./NewRequestButton";
 
 const monthNames = [
     "January",
@@ -40,6 +39,11 @@ export const Calendar = ({ events, modalHandler }) => {
         return today.toDateString() === d.toDateString();
     };
 
+    const isWeekend = (date) => {
+        const d = new Date(year, month, date)
+        return d.getDay() === 0 || d.getDay() === 6
+    }
+
     const calculateAndSetNumberOfDays = () => {
         let i;
         let daysInMonth = new Date(year, month + 1, 0).getDate();
@@ -62,7 +66,6 @@ export const Calendar = ({ events, modalHandler }) => {
 
     useEffect(() => {
         calculateAndSetNumberOfDays();
-        console.log(month, year);
     }, [month]);
 
     const nextMonth = () => {
@@ -85,6 +88,14 @@ export const Calendar = ({ events, modalHandler }) => {
         calculateAndSetNumberOfDays();
     };
 
+    const resetToToday = () => {
+        const now = new Date()
+        const nowMonth = now.getMonth()
+        const nowYear = now.getFullYear()
+        setYear(nowYear)
+        setMonth(nowMonth)
+    }
+
     return (
         <>
             <div className="container mx-auto py-4 px-6">
@@ -99,43 +110,45 @@ export const Calendar = ({ events, modalHandler }) => {
                             </span>
                         </div>
                         <div className="flex end justify-center content-center">
-                            <div className="border rounded-lg px-1 pt-1 mr-2">
-                                <button
-                                    className="leading-none rounded-lg transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-200 p-1 items-center focus:outline-none"
-                                    onClick={modalHandler}
-                                >
-                                    <PlusIcon className="h-5 w-5 text-gray-500 inline-flex leading-none" />
-                                    <p className="ml-1 text-md text-gray-600 font-normal">
-                                        New Request
-                                    </p>
+                            <NewRequestButton modalHandler={modalHandler} />
+                            <div className="flex justify-center align-center rounded-lg mr-2 border ">
+                                <button className="leading-none rounded-lg transition ease-in-out duration-100 inline-flex cursor-pointer text-white hover:bg-gray-200 p-3 items-center focus:outline-none">
+                                    <RefreshIcon className="h-5 w-5 inline-flex leading-none text-gray-500" />
                                 </button>
                             </div>
-                            <div className="border rounded-lg px-1 pt-1 mr-2">
-                                <button className="leading-none rounded-lg transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-200 p-1 items-center focus:outline-none">
-                                    <RefreshIcon className="h-5 w-5 text-gray-500 inline-flex leading-none" />
-                                </button>
-                            </div>
-                            <div className="border rounded-lg px-1 pt-1">
+                            <div className="border rounded-lg flex flex-row">
                                 {/* Previous Month Button */}
                                 <button
                                     type="button"
                                     onClick={() => previousMonth()}
                                     className={
-                                        "leading-none rounded-lg transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-200 p-1 items-center focus:outline-none"
+                                        "leading-none rounded-l-lg transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-200 p-3 items-center focus:outline-none"
                                     }
                                 >
-                                    <ArrowLeftIcon className="h-6 w-6 text-gray-500 inline-flex leading-none" />
+                                    <ArrowLeftIcon className="h-5 w-5 text-gray-500 inline-flex leading-none" />
                                 </button>
-                                <div className="border-r inline-flex h-6" />
+                                <div className="border-l inline-flex h-11" />
+                                <button
+                                    type="button"
+                                    onClick={() => resetToToday()}
+                                    className={
+                                        "leading-none transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-200 p-1 items-center focus:outline-none"
+                                    }
+                                >
+                                    <span className="h-5 w-auto text-gray-500 inline-flex leading-none">
+                                        Today
+                                    </span>
+                                </button>
+                                <div className="border-r inline-flex h-11" />
                                 {/* Next Month Button */}
                                 <button
                                     type="button"
                                     onClick={() => nextMonth()}
                                     className={
-                                        "leading-none rounded-lg transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-200 p-1 items-center focus:outline-none"
+                                        "leading-none rounded-r-lg transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-200 p-3 items-center focus:outline-none"
                                     }
                                 >
-                                    <ArrowRightIcon className="h-6 w-6 text-gray-500 inline-flex leading-none" />
+                                    <ArrowRightIcon className="h-5 w-5 text-gray-500 inline-flex leading-none" />
                                 </button>
                             </div>
                         </div>
@@ -146,7 +159,7 @@ export const Calendar = ({ events, modalHandler }) => {
                             style={{ marginBottom: "-30px" }}
                         >
                             {days.map((day) => (
-                                <div key={day} className="px-2 py-2 w-[14.28%]">
+                                <div key={day} className="px-2 py-2 w-[14.28%] z-50">
                                     <div className="text-gray-600 text-sm uppercase tracking-wide font-bold text-center">
                                         {day}
                                     </div>
@@ -163,16 +176,17 @@ export const Calendar = ({ events, modalHandler }) => {
                             {numOfDays.map((date, index) => (
                                 <div
                                     key={index}
-                                    className="px-4 pt-2 border-r border-b relative h-32 w-[14.28%]"
-                                >
-                                    <div
-                                        className={classNames(
+                                    className={classNames(
+                                            isWeekend(date)
+                                            ? "bg-zinc-200"
+                                            : "z-1000",
                                             isToday(date)
-                                                ? "bg-orange-600 text-white"
-                                                : "text-gray-700",
-                                            "inline-flex w-6 h-6 items-center cursor-default justify-center text-center leading-none rounded-full transition ease-in-out duration-100"
-                                        )}
-                                    >
+                                            ? "border-zinc-800 border-2"
+                                            : "",
+                                        "px-4 pt-2 border relative h-32 w-[14.28%]"
+                                    )}
+                                >
+                                    <div className={"inline-flex w-6 h-6 items-center cursor-default justify-center text-center leading-none rounded-full transition ease-in-out duration-100"}>
                                         {date}
                                     </div>
                                     <span className="float-right text-xs opacity-30">
@@ -205,15 +219,12 @@ export const Calendar = ({ events, modalHandler }) => {
                                                     ).toDateString()
                                             )
                                             .map((e) => (
+                                                new Date(e.event_epoch).getDay() === 0 || new Date(e.event_epoch).getDay() === 6 ? "" 
+                                                :
                                                 <div
                                                     key={e.user_name}
                                                     className={classNames(
-                                                        eventClass(
-                                                            e.event_theme
-                                                        ),
-                                                        e.pending
-                                                            ? "opacity-30"
-                                                            : "",
+                                                        eventClass(e),
                                                         e.morningHalfDay ===
                                                             true
                                                             ? "w-1/2"

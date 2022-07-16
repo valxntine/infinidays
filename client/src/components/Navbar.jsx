@@ -1,11 +1,7 @@
 import { Disclosure } from "@headlessui/react";
-import { BellIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
 import logo from "../static/logo.svg";
 import { NavLink } from "react-router-dom";
-
-function classNames(...classes) {
-    return classes.filter(Boolean).join(" ");
-}
+import { classNames } from "../utils/classnames";
 
 const navigation = [
     { name: "Dashboard", href: "/" },
@@ -35,14 +31,12 @@ export const Navbar = ({ user }) => {
                                                 key={item.name}
                                                 to={item.href}
                                                 className={({ isActive }) =>
-                                                    [
+                                                    classNames(
                                                         "px-3 py-2 rounded-md text-sm font-medium",
                                                         isActive
                                                             ? "bg-orange-600 text-white"
                                                             : "text-zinc-300 hover:bg-zinc-700 hover:text-white",
-                                                    ]
-                                                        .filter(Boolean)
-                                                        .join(" ")
+                                                    )
                                                 }
                                                 aria-current={
                                                     item.current
@@ -50,9 +44,7 @@ export const Navbar = ({ user }) => {
                                                         : undefined
                                                 }
                                                 onClick={() => {
-                                                    console.log(item);
                                                     item.current = true;
-                                                    console.log(item);
                                                 }}
                                             >
                                                 {item.name}
@@ -66,12 +58,10 @@ export const Navbar = ({ user }) => {
                                     <div className="text-sm font-medium leading-none text-zinc-400">
                                         {user.name}
                                     </div>
-
-                                    {/* Profile dropdown */}
                                 </div>
                             </div>
-                            <div className="-mr-2 flex md:hidden">
-                                {/* Mobile menu button */}
+                            {/* <div className="-mr-2 flex md:hidden">
+                                {/* Mobile menu button
                                 <Disclosure.Button className="bg-zinc-800 inline-flex items-center justify-center p-2 rounded-md text-zinc-400 hover:text-orange-600 hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-zinc-800 focus:ring-white">
                                     <span className="sr-only">
                                         Open main menu
@@ -88,29 +78,31 @@ export const Navbar = ({ user }) => {
                                         />
                                     )}
                                 </Disclosure.Button>
-                            </div>
+                            </div> 
+                            */}
                         </div>
                     </div>
 
-                    <Disclosure.Panel className="md:hidden">
+                    {/* <Disclosure.Panel className="md:hidden">
                         <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
                             {navigation.map((item) => (
-                                <Disclosure.Button
+                                <NavLink
                                     key={item.name}
-                                    as="a"
-                                    href={item.href}
-                                    className={classNames(
-                                        item.current
-                                            ? "bg-orange-600 text-zinc-800"
-                                            : "text-zinc-300 hover:bg-zinc-700 hover:text-white",
-                                        "block px-3 py-2 rounded-md text-base font-medium"
-                                    )}
+                                    to={item.href}
+                                    className={({ isActive }) =>
+                                        classNames(
+                                            isActive
+                                                ? "bg-orange-600 text-zinc-800"
+                                                : "text-zinc-300 hover:bg-zinc-700 hover:text-white",
+                                            "block px-3 py-2 rounded-md text-base font-medium"
+                                        )
+                                    }
                                     aria-current={
                                         item.current ? "page" : undefined
                                     }
                                 >
                                     {item.name}
-                                </Disclosure.Button>
+                                </NavLink>
                             ))}
                         </div>
                         <div className="pt-4 pb-3 border-t border-zinc-700">
@@ -122,7 +114,7 @@ export const Navbar = ({ user }) => {
                                 </div>
                             </div>
                         </div>
-                    </Disclosure.Panel>
+                    </Disclosure.Panel> */}
                 </>
             )}
         </Disclosure>

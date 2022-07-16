@@ -11,6 +11,5 @@ export const getDatesInRange = (events) => {
             date = date + 86400000;
         }
     }
-
     return expandedData;
 };
