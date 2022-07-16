@@ -30,7 +30,7 @@ const List = () => {
 
     return (
         <>
-            <p>Everyone in the database...</p>
+            <p>Everyone in the database....</p>
             {data.map((el, i) => {
                 return <p key={i}>{el.user_name}</p>;
             })}
