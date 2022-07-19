@@ -16,7 +16,7 @@ module "function" {
   environment = {
     DB_HOST     = module.postgres.host
     DB_USERNAME = module.postgres.username
-    DB_PASSWORD = module.postgres.password
+    DB_PASSWORD = module.postgres.db_pass
     DB_NAME     = module.postgres.db_name
     DB_PORT     = module.postgres.port
   }
