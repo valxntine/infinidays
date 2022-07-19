@@ -4,7 +4,6 @@ import { Navbar } from "./components/Navbar";
 import { Dashboard } from "./components/Dashboard";
 import { MyRequests } from "./components/MyRequests";
 import { getDatesInRange } from "./utils/getrangeofdates";
-import { set } from "react-hook-form";
 
 export default function Example() {
     const [modal, setModal] = useState(false);

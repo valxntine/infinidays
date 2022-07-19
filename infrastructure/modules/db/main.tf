@@ -1,3 +1,8 @@
+resource "random_password" "main" {
+  length = 16
+  special = false
+}
+
 resource "aws_db_instance" "main" {
   allocated_storage = 10
   engine = "postgres"
@@ -5,15 +10,16 @@ resource "aws_db_instance" "main" {
   instance_class = "db.t4g.micro"
   db_name = "infinidays"
   username = "postgres"
-  password = "valentine"
+  password = random_password.main.result
+  publicly_accessible = false
+}
+
+output "db_pass" {
+  value = random_password.main.result
 }
 
 output "username" {
   value = aws_db_instance.main.username
-}
-
-output "password" {
-  value = aws_db_instance.main.password
 }
 
 output "db_name" {
