@@ -222,7 +222,7 @@ export const Calendar = ({ events, modalHandler }) => {
                                                 new Date(e.event_epoch).getDay() === 0 || new Date(e.event_epoch).getDay() === 6 ? "" 
                                                 :
                                                 <div
-                                                    key={e.user_name}
+                                                    key={`${e.user_name}-${e.event_epoch + (Math.random() * 1000)}`}
                                                     className={classNames(
                                                         eventClass(e),
                                                         e.morningHalfDay ===

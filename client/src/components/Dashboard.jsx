@@ -3,10 +3,10 @@ import { classNames } from "../utils/classnames";
 import { eventClass } from "../utils/eventclass";
 import { RequestModal } from "./RequestModel";
 
-export const Dashboard = ({ expandedEvents, events, modal, modalHandler, team, user, setEvents }) => {
+export const Dashboard = ({ expandedEvents, events, modal, modalHandler, team, user, setExpandedEvents }) => {
     return (
         <>
-            {modal && <RequestModal modalHandler={modalHandler} setEvents={setEvents} events={events} user={user} />}
+            {modal && <RequestModal modalHandler={modalHandler} setExpandedEvents={setExpandedEvents} events={events} user={user} expandedEvents={expandedEvents} />}
             <header className="bg-white shadow">
                 <div className="flex flex-wrap justify-around max-w-7xl mx-auto py-2 px-2 sm:px-4 lg:px-6">
                 <span key={user.name}>

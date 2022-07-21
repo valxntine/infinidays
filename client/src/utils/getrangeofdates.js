@@ -5,6 +5,7 @@ export const getDatesInRange = (events) => {
         let date = event.event_start_date;
         while (date <= event.event_end_date) {
             expandedData.push({
+                id: Math.random() * 10,
                 event_epoch: date,
                 ...event,
             });

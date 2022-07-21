@@ -118,22 +118,17 @@ export default function Example() {
         },
     ]);
 
-    const updateEvents = (event) => {
-        const currEvents = [...events]
-        setEvents([...currEvents, event])
-    }
-
     const deleteEvent = (id) => {
         let currEvents = [...events]
         const newEvents = currEvents.filter((e) => e.id !== id)
         setEvents(newEvents)
     }
 
-    const [expandedEvents, setExpandedEvents] = useState(getDatesInRange(events));
+    const [expandedEvents, setExpandedEvents] = useState([]);
 
     useEffect(() => {
         console.log(events)
-        setExpandedEvents(getDatesInRange(events))
+        setExpandedEvents(curr => [...curr, ...getDatesInRange(events)])
         console.log(expandedEvents)
     }, [events])
 
@@ -155,7 +150,8 @@ export default function Example() {
                                     user={user}
                                     events={events}
                                     deleteHandler={deleteEvent}
-                                    setEvents={updateEvents}
+                                    setExpandedEvents={setExpandedEvents}
+                                    expandedEvents={expandedEvents}
                                 />
                             }
                         />
@@ -164,12 +160,11 @@ export default function Example() {
                             element={
                                 <Dashboard
                                     expandedEvents={expandedEvents}
-                                    events={events}
                                     modalHandler={setModalState}
                                     modal={modal}
                                     team={teamMembers}
                                     user={user}
-                                    setEvents={updateEvents}
+                                    setExpandedEvents={setExpandedEvents}
                                 />
                             }
                         />
