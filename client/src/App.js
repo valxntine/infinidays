@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { Navbar } from "./components/Navbar";
 import { Dashboard } from "./components/Dashboard";
 import { MyRequests } from "./components/MyRequests";
+import { Profile } from "./components/Profile";
 import { getDatesInRange } from "./utils/getrangeofdates";
 
 export default function Example() {
@@ -33,6 +34,7 @@ export default function Example() {
         name: "Valentine Bott",
         project: "Dojo",
         color: "purple",
+        careerLevel: "CL9",
     });
     const [events, setEvents] = useState([
         {
@@ -42,8 +44,8 @@ export default function Example() {
             user_name: "Phoebe Gash",
             event_theme: "red",
             pending: true,
-            morningHalfDay: true,
-            afternoonHalfDay: null,
+            firstHalfDay: true,
+            lastDayHalf: null,
         },
 
         {
@@ -53,8 +55,8 @@ export default function Example() {
             user_name: "Valentine Bott",
             event_theme: "purple",
             pending: false,
-            morningHalfDay: null,
-            afternoonHalfDay: null,
+            firstHalfDay: null,
+            lastDayHalf: null,
         },
         {
             id: 3,
@@ -63,8 +65,8 @@ export default function Example() {
             user_name: "Valentine Bott",
             event_theme: "purple",
             pending: false,
-            morningHalfDay: null,
-            afternoonHalfDay: null,
+            firstHalfDay: null,
+            lastDayHalf: null,
         },
         {
             id: 4,
@@ -73,8 +75,8 @@ export default function Example() {
             user_name: "Valentine Bott",
             event_theme: "purple",
             pending: true,
-            morningHalfDay: null,
-            afternoonHalfDay: null,
+            firstHalfDay: null,
+            lastDayHalf: null,
         },
         {
             id: 5,
@@ -83,8 +85,8 @@ export default function Example() {
             user_name: "Valentine Bott",
             event_theme: "purple",
             pending: false,
-            morningHalfDay: null,
-            afternoonHalfDay: null,
+            firstHalfDay: null,
+            lastDayHalf: null,
         },
         {
             id: 6,
@@ -93,8 +95,8 @@ export default function Example() {
             user_name: "Ron Kulbin",
             event_theme: "blue",
             pending: true,
-            morningHalfDay: null,
-            afternoonHalfDay: true,
+            firstHalfDay: null,
+            lastDayHalf: true,
         },
         {
             id: 7,
@@ -103,8 +105,8 @@ export default function Example() {
             user_name: "Shaw Malcom",
             event_theme: "green",
             pending: false,
-            morningHalfDay: null,
-            afternoonHalfDay: null,
+            firstHalfDay: null,
+            lastDayHalf: null,
         },
         {
             id: 8,
@@ -113,10 +115,14 @@ export default function Example() {
             user_name: "Ria Kinsley",
             event_theme: "yellow",
             pending: false,
-            morningHalfDay: null,
-            afternoonHalfDay: true,
+            firstHalfDay: null,
+            lastDayHalf: true,
         },
     ]);
+    
+    const addEvent = (event) => {
+        setEvents(curr => [...curr, event])
+    }
 
     const deleteEvent = (id) => {
         let currEvents = [...events]
@@ -127,9 +133,7 @@ export default function Example() {
     const [expandedEvents, setExpandedEvents] = useState([]);
 
     useEffect(() => {
-        console.log(events)
-        setExpandedEvents(curr => [...curr, ...getDatesInRange(events)])
-        console.log(expandedEvents)
+        setExpandedEvents(curr => [...getDatesInRange(events)])
     }, [events])
 
     const setModalState = () => {
@@ -142,6 +146,12 @@ export default function Example() {
                     <Navbar user={user} />
                     <Routes>
                         <Route
+                            path="/profile"
+                            element={
+                                <Profile user={user} events={expandedEvents} />
+                            }
+                        />
+                        <Route
                             path="/requests"
                             element={
                                 <MyRequests
@@ -152,6 +162,7 @@ export default function Example() {
                                     deleteHandler={deleteEvent}
                                     setExpandedEvents={setExpandedEvents}
                                     expandedEvents={expandedEvents}
+                                    addEventHandler={addEvent}
                                 />
                             }
                         />
@@ -165,6 +176,7 @@ export default function Example() {
                                     team={teamMembers}
                                     user={user}
                                     setExpandedEvents={setExpandedEvents}
+                                    addEventHandler={addEvent}
                                 />
                             }
                         />

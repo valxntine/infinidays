@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { getDatesInRange } from "../utils/getrangeofdates";
 import { datesOverlap } from "../utils/checkforoverlappingdates";
 
-export const RequestModal = ({ modalHandler, events, setExpandedEvents, user, expandedEvents }) => {
+export const RequestModal = ({ modalHandler, events, setExpandedEvents, user, expandedEvents, addEventHandler }) => {
     const { register, handleSubmit } = useForm();
     const [overlapError, setOverlapError] = useState(false)
 
@@ -21,13 +21,14 @@ export const RequestModal = ({ modalHandler, events, setExpandedEvents, user, ex
             user_name: user.name,
             event_theme: user.color,
             pending: true,
-            morningHalfDay: false,
-            afternoonHalfDay: false,
+            firstHalfDay: false,
+            lastDayHalf: false,
         };
         const expandedDates = getDatesInRange([newEvent]) 
 
         if (datesOverlap(expandedDates, expandedEvents, user.name)) { setOverlapError(true); return}
 
+        addEventHandler(newEvent)
         setExpandedEvents(curr => [...curr, ...expandedDates]);
         modalHandler();
     };

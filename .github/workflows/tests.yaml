@@ -1,0 +1,21 @@
+name: Deploy React app to S3 Bucket
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths: 
+      - client/**
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Node
+        uses: actions/setup-node@v2
+      - name: NPM install
+        uses: cd client && npm install
+      - name: Run Tests
+        uses: cd client && npm run test -- --watchAll=false

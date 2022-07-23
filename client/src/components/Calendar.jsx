@@ -6,6 +6,7 @@ import {
 } from "@heroicons/react/solid";
 import { classNames } from "../utils/classnames";
 import { eventClass } from "../utils/eventclass";
+import { isWeekend } from "../utils/isweekend";
 import { NewRequestButton } from "./NewRequestButton";
 
 const monthNames = [
@@ -39,10 +40,7 @@ export const Calendar = ({ events, modalHandler }) => {
         return today.toDateString() === d.toDateString();
     };
 
-    const isWeekend = (date) => {
-        const d = new Date(year, month, date)
-        return d.getDay() === 0 || d.getDay() === 6
-    }
+
 
     const calculateAndSetNumberOfDays = () => {
         let i;
@@ -177,7 +175,7 @@ export const Calendar = ({ events, modalHandler }) => {
                                 <div
                                     key={index}
                                     className={classNames(
-                                            isWeekend(date)
+                                            isWeekend(year, month, date)
                                             ? "bg-zinc-200"
                                             : "z-1000",
                                             isToday(date)
@@ -225,11 +223,11 @@ export const Calendar = ({ events, modalHandler }) => {
                                                     key={`${e.user_name}-${e.event_epoch + (Math.random() * 1000)}`}
                                                     className={classNames(
                                                         eventClass(e),
-                                                        e.morningHalfDay ===
+                                                        e.firstHalfDay ===
                                                             true
                                                             ? "w-1/2"
                                                             : "",
-                                                        e.afternoonHalfDay ===
+                                                        e.lastDayHalf ===
                                                             true
                                                             ? "w-1/2 ml-auto"
                                                             : "",
