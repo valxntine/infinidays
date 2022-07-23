@@ -44,7 +44,7 @@ test("when a list of events with just one event in it is passed, which has a sta
     ;
 
     const actual = getDatesInRange(events);
-    expect(actual.length).toBe(3)
+    expect(actual.length).toBe(2)
     expect(actual).toEqual(expect.arrayContaining(
         [expect.objectContaining(expected[0]),
         expect.objectContaining(expected[1])
