@@ -1,4 +1,4 @@
-name: Deploy React app to S3 Bucket
+name: Run Unit Tests
 
 on:
   pull_request:
@@ -16,6 +16,6 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v2
       - name: NPM install
-        uses: cd client && npm install
+        run: cd client && npm install
       - name: Run Tests
-        uses: cd client && npm run test -- --watchAll=false
+        run: cd client && npm run test -- --watchAll=false
