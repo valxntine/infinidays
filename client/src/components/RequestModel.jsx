@@ -1,28 +1,35 @@
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { getDatesInRange } from "../utils/getrangeofdates";
+import { datesOverlap } from "../utils/checkforoverlappingdates";
 
-export const RequestModal = ({ modalHandler, events, setEvents, user }) => {
+export const RequestModal = ({ modalHandler, events, setExpandedEvents, user, expandedEvents, addEventHandler }) => {
     const { register, handleSubmit } = useForm();
+    const [overlapError, setOverlapError] = useState(false)
 
     const onSubmit = (e) => {
         console.log(JSON.stringify(e, null, 2));
         const startDate = e.firstDayDate.split("-");
         const endDate = e.lastDayDate.split("-");
-        const currEvents = [...events];
         const newEvent = {
-            id: events.at(-1).id + 1,
             event_start_date: Date.UTC(
                 startDate[0],
-                startDate[1]-1,
+                startDate[1] - 1,
                 startDate[2]
             ),
-            event_end_date: Date.UTC(endDate[0], endDate[1]-1, endDate[2]),
+            event_end_date: Date.UTC(endDate[0], endDate[1] - 1, endDate[2]),
             user_name: user.name,
             event_theme: user.color,
             pending: true,
-            morningHalfDay: false,
-            afternoonHalfDay: false,
+            firstHalfDay: false,
+            lastDayHalf: false,
         };
-        setEvents(newEvent);
+        const expandedDates = getDatesInRange([newEvent]) 
+
+        if (datesOverlap(expandedDates, expandedEvents, user.name)) { setOverlapError(true); return}
+
+        addEventHandler(newEvent)
+        setExpandedEvents(curr => [...curr, ...expandedDates]);
         modalHandler();
     };
     return (
@@ -53,7 +60,7 @@ export const RequestModal = ({ modalHandler, events, setEvents, user }) => {
                                                 <span className="text-zinc-500">
                                                     First Day of Leave
                                                 </span>
-                                                <div className="flex flex-row items-center">
+                                                <div className="flex flex-row items-center justify-between">
                                                     <input
                                                         {...register(
                                                             "firstDayDate"
@@ -69,38 +76,17 @@ export const RequestModal = ({ modalHandler, events, setEvents, user }) => {
                                                     />
                                                     <div className="flex flex-row items-center">
                                                         <span className="mx-4">
-                                                            Half day?
+                                                            Half day in the
+                                                            morning?
                                                         </span>
-                                                        <label>
-                                                            am
-                                                            <input
-                                                                type="checkbox"
-                                                                className="form-checkbox ml-1 mr-4 bg-zinc-100 text-orange-600 focus:border-orange-600 focus:ring-0"
-                                                                value="am"
-                                                                {...register(
-                                                                    "first-halfday"
-                                                                )}
-                                                                id="first-day-am"
-                                                                onClick={
-                                                                    uncheckAlternateBox
-                                                                }
-                                                            />
-                                                        </label>
-                                                        <label>
-                                                            pm
-                                                            <input
-                                                                type="checkbox"
-                                                                className="form-checkbox ml-1 mr-4 bg-zinc-100 text-orange-600 focus:border-orange-600 focus:ring-0"
-                                                                value="pm"
-                                                                {...register(
-                                                                    "first-halfday"
-                                                                )}
-                                                                id="first-day-pm"
-                                                                onClick={
-                                                                    uncheckAlternateBox
-                                                                }
-                                                            />
-                                                        </label>
+                                                        <input
+                                                            type="checkbox"
+                                                            className="form-checkbox ml-1 mr-4 bg-zinc-100 text-orange-600 focus:border-orange-600 focus:ring-0"
+                                                            {...register(
+                                                                "firstHalfday"
+                                                            )}
+                                                            id="first-day-half"
+                                                        />
                                                     </div>
                                                 </div>
                                             </label>
@@ -109,7 +95,7 @@ export const RequestModal = ({ modalHandler, events, setEvents, user }) => {
                                             <span className="text-zinc-500">
                                                 Last Day of Leave
                                             </span>
-                                            <div className="flex flex-row items-center">
+                                            <div className="flex flex-row items-center justify-between">
                                                 <input
                                                     {...register("lastDayDate")}
                                                     type="date"
@@ -123,38 +109,17 @@ export const RequestModal = ({ modalHandler, events, setEvents, user }) => {
                                                 />
                                                 <div className="flex flex-row items-center">
                                                     <span className="mx-4">
-                                                        Half day?
+                                                        Half day in the
+                                                        afternoon?
                                                     </span>
-                                                    <label>
-                                                        am
-                                                        <input
-                                                            type="checkbox"
-                                                            className="form-checkbox ml-1 mr-4 bg-zinc-100 text-orange-600 focus:border-orange-600 focus:ring-0"
-                                                            value="am"
-                                                            {...register(
-                                                                "last-halfday"
-                                                            )}
-                                                            id="last-day-am"
-                                                            onClick={
-                                                                uncheckAlternateBox
-                                                            }
-                                                        />
-                                                    </label>
-                                                    <label>
-                                                        pm
-                                                        <input
-                                                            type="checkbox"
-                                                            className="form-checkbox ml-1 mr-4 bg-zinc-100 text-orange-600 focus:border-orange-600 focus:ring-0"
-                                                            value="pm"
-                                                            {...register(
-                                                                "last-halfday"
-                                                            )}
-                                                            id="last-day-pm"
-                                                            onClick={
-                                                                uncheckAlternateBox
-                                                            }
-                                                        />
-                                                    </label>
+                                                    <input
+                                                        type="checkbox"
+                                                        className="form-checkbox ml-1 mr-4 bg-zinc-100 text-orange-600 focus:border-orange-600 focus:ring-0"
+                                                        {...register(
+                                                            "lastHalfday"
+                                                        )}
+                                                        id="last-day-half"
+                                                    />
                                                 </div>
                                             </div>
                                         </label>
@@ -171,7 +136,7 @@ export const RequestModal = ({ modalHandler, events, setEvents, user }) => {
                                                             className="form-radio ml-1 mr-4 bg-zinc-100 text-orange-600 focus:border-orange-600 focus:ring-0"
                                                             value="true"
                                                             required={true}
-                                                            {...register("al")}
+                                                            {...register("annualLeave")}
                                                         />
                                                     </label>
                                                     <label>
@@ -181,7 +146,7 @@ export const RequestModal = ({ modalHandler, events, setEvents, user }) => {
                                                             className="form-radio ml-1 mr-4 bg-zinc-100 text-orange-600 focus:border-orange-600 focus:ring-0"
                                                             value="false"
                                                             required={true}
-                                                            {...register("al")}
+                                                            {...register("annualLeave")}
                                                         />
                                                     </label>
                                                 </div>
@@ -189,6 +154,7 @@ export const RequestModal = ({ modalHandler, events, setEvents, user }) => {
                                         </label>
                                     </div>
                                 </div>
+                                {overlapError && <p className="text-red-400">Your current selection overlaps with leave you already have booked.</p>}
                             </div>
                             <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                                 <input
@@ -211,11 +177,4 @@ export const RequestModal = ({ modalHandler, events, setEvents, user }) => {
             </div>
         </div>
     );
-};
-
-const uncheckAlternateBox = (checkbox) => {
-    let checkboxes = document.getElementsByName(checkbox.target.name);
-    checkboxes.forEach((box) => {
-        if (box.value !== checkbox.target.value) box.checked = false;
-    });
 };
