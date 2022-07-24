@@ -2,6 +2,7 @@ import { isWeekend } from "./isweekend";
 
 export const calculateLeave = (careerLevel, currentEvents, userName) => {
     let output = {}
+    const now = new Date()
     const accrualPerPeriod =
         parseInt(careerLevel.split("L")[1]) > 7 ? 7.8 : 9.3;
 
@@ -20,7 +21,10 @@ export const calculateLeave = (careerLevel, currentEvents, userName) => {
 
     for (let event of currentEvents) {
         const eventDate = new Date(event.event_epoch)
-        if (isWeekend(eventDate.getFullYear(), eventDate.getMonth(), eventDate.getDate())) {
+        if (isWeekend(eventDate.getFullYear(), eventDate.getMonth(), eventDate.getDate()) 
+        || !event.annualLeave 
+        || eventDate.getMonth() > 8
+        || eventDate.getFullYear() > now.getFullYear()) {
             continue
         }
         if (event.user_name === userName) {

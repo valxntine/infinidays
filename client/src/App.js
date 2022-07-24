@@ -46,6 +46,7 @@ export default function Example() {
             pending: true,
             firstHalfDay: true,
             lastDayHalf: null,
+            annualLeave: true,
         },
 
         {
@@ -57,6 +58,7 @@ export default function Example() {
             pending: false,
             firstHalfDay: null,
             lastDayHalf: null,
+            annualLeave: true,
         },
         {
             id: 3,
@@ -67,6 +69,7 @@ export default function Example() {
             pending: false,
             firstHalfDay: null,
             lastDayHalf: null,
+            annualLeave: true,
         },
         {
             id: 4,
@@ -77,6 +80,7 @@ export default function Example() {
             pending: true,
             firstHalfDay: null,
             lastDayHalf: null,
+            annualLeave: true,
         },
         {
             id: 5,
@@ -87,6 +91,7 @@ export default function Example() {
             pending: false,
             firstHalfDay: null,
             lastDayHalf: null,
+            annualLeave: true,
         },
         {
             id: 6,
@@ -97,6 +102,7 @@ export default function Example() {
             pending: true,
             firstHalfDay: null,
             lastDayHalf: true,
+            annualLeave: true,
         },
         {
             id: 7,
@@ -107,6 +113,7 @@ export default function Example() {
             pending: false,
             firstHalfDay: null,
             lastDayHalf: null,
+            annualLeave: true,
         },
         {
             id: 8,
@@ -117,6 +124,7 @@ export default function Example() {
             pending: false,
             firstHalfDay: null,
             lastDayHalf: true,
+            annualLeave: true,
         },
     ]);
     

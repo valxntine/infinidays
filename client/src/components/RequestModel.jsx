@@ -23,6 +23,7 @@ export const RequestModal = ({ modalHandler, events, setExpandedEvents, user, ex
             pending: true,
             firstHalfDay: false,
             lastDayHalf: false,
+            annualLeave: e.annualLeave === "true",
         };
         const expandedDates = getDatesInRange([newEvent]) 
 
