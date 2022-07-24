@@ -23,7 +23,7 @@ export const calculateLeave = (careerLevel, currentEvents, userName) => {
         const eventDate = new Date(event.event_epoch)
         if (isWeekend(eventDate.getFullYear(), eventDate.getMonth(), eventDate.getDate()) 
         || !event.annualLeave 
-        || eventDate.getMonth() > 8
+        || (eventDate.getMonth() > 8 && now.getMonth() < 8)
         || eventDate.getFullYear() > now.getFullYear()) {
             continue
         }
