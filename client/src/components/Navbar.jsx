@@ -35,7 +35,7 @@ export const Navbar = ({ user }) => {
                                                         "px-3 py-2 rounded-md text-sm font-medium",
                                                         isActive
                                                             ? "bg-orange-600 text-white"
-                                                            : "text-zinc-300 hover:bg-zinc-700 hover:text-white",
+                                                            : "text-zinc-300 hover:bg-zinc-700 hover:text-white"
                                                     )
                                                 }
                                                 aria-current={

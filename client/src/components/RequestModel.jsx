@@ -3,9 +3,16 @@ import { useForm } from "react-hook-form";
 import { getDatesInRange } from "../utils/getrangeofdates";
 import { datesOverlap } from "../utils/checkforoverlappingdates";
 
-export const RequestModal = ({ modalHandler, events, setExpandedEvents, user, expandedEvents, addEventHandler }) => {
+export const RequestModal = ({
+    modalHandler,
+    events,
+    setExpandedEvents,
+    user,
+    expandedEvents,
+    addEventHandler,
+}) => {
     const { register, handleSubmit } = useForm();
-    const [overlapError, setOverlapError] = useState(false)
+    const [overlapError, setOverlapError] = useState(false);
 
     const onSubmit = (e) => {
         console.log(JSON.stringify(e, null, 2));
@@ -23,13 +30,17 @@ export const RequestModal = ({ modalHandler, events, setExpandedEvents, user, ex
             pending: true,
             firstHalfDay: false,
             lastDayHalf: false,
+            annualLeave: e.annualLeave === "true",
         };
-        const expandedDates = getDatesInRange([newEvent]) 
+        const expandedDates = getDatesInRange([newEvent]);
 
-        if (datesOverlap(expandedDates, expandedEvents, user.name)) { setOverlapError(true); return}
+        if (datesOverlap(expandedDates, expandedEvents, user.name)) {
+            setOverlapError(true);
+            return;
+        }
 
-        addEventHandler(newEvent)
-        setExpandedEvents(curr => [...curr, ...expandedDates]);
+        addEventHandler(newEvent);
+        setExpandedEvents((curr) => [...curr, ...expandedDates]);
         modalHandler();
     };
     return (
@@ -136,7 +147,9 @@ export const RequestModal = ({ modalHandler, events, setExpandedEvents, user, ex
                                                             className="form-radio ml-1 mr-4 bg-zinc-100 text-orange-600 focus:border-orange-600 focus:ring-0"
                                                             value="true"
                                                             required={true}
-                                                            {...register("annualLeave")}
+                                                            {...register(
+                                                                "annualLeave"
+                                                            )}
                                                         />
                                                     </label>
                                                     <label>
@@ -146,7 +159,9 @@ export const RequestModal = ({ modalHandler, events, setExpandedEvents, user, ex
                                                             className="form-radio ml-1 mr-4 bg-zinc-100 text-orange-600 focus:border-orange-600 focus:ring-0"
                                                             value="false"
                                                             required={true}
-                                                            {...register("annualLeave")}
+                                                            {...register(
+                                                                "annualLeave"
+                                                            )}
                                                         />
                                                     </label>
                                                 </div>
@@ -154,7 +169,12 @@ export const RequestModal = ({ modalHandler, events, setExpandedEvents, user, ex
                                         </label>
                                     </div>
                                 </div>
-                                {overlapError && <p className="text-red-400">Your current selection overlaps with leave you already have booked.</p>}
+                                {overlapError && (
+                                    <p className="text-red-400">
+                                        Your current selection overlaps with
+                                        leave you already have booked.
+                                    </p>
+                                )}
                             </div>
                             <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                                 <input

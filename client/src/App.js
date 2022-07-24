@@ -46,6 +46,7 @@ export default function Example() {
             pending: true,
             firstHalfDay: true,
             lastDayHalf: null,
+            annualLeave: true,
         },
 
         {
@@ -57,6 +58,7 @@ export default function Example() {
             pending: false,
             firstHalfDay: null,
             lastDayHalf: null,
+            annualLeave: true,
         },
         {
             id: 3,
@@ -67,6 +69,7 @@ export default function Example() {
             pending: false,
             firstHalfDay: null,
             lastDayHalf: null,
+            annualLeave: true,
         },
         {
             id: 4,
@@ -77,6 +80,7 @@ export default function Example() {
             pending: true,
             firstHalfDay: null,
             lastDayHalf: null,
+            annualLeave: true,
         },
         {
             id: 5,
@@ -87,6 +91,7 @@ export default function Example() {
             pending: false,
             firstHalfDay: null,
             lastDayHalf: null,
+            annualLeave: true,
         },
         {
             id: 6,
@@ -97,6 +102,7 @@ export default function Example() {
             pending: true,
             firstHalfDay: null,
             lastDayHalf: true,
+            annualLeave: true,
         },
         {
             id: 7,
@@ -107,6 +113,7 @@ export default function Example() {
             pending: false,
             firstHalfDay: null,
             lastDayHalf: null,
+            annualLeave: true,
         },
         {
             id: 8,
@@ -117,24 +124,25 @@ export default function Example() {
             pending: false,
             firstHalfDay: null,
             lastDayHalf: true,
+            annualLeave: true,
         },
     ]);
-    
+
     const addEvent = (event) => {
-        setEvents(curr => [...curr, event])
-    }
+        setEvents((curr) => [...curr, event]);
+    };
 
     const deleteEvent = (id) => {
-        let currEvents = [...events]
-        const newEvents = currEvents.filter((e) => e.id !== id)
-        setEvents(newEvents)
-    }
+        let currEvents = [...events];
+        const newEvents = currEvents.filter((e) => e.id !== id);
+        setEvents(newEvents);
+    };
 
     const [expandedEvents, setExpandedEvents] = useState([]);
 
     useEffect(() => {
-        setExpandedEvents(curr => [...getDatesInRange(events)])
-    }, [events])
+        setExpandedEvents((curr) => [...getDatesInRange(events)]);
+    }, [events]);
 
     const setModalState = () => {
         setModal(!modal);

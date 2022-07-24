@@ -19,7 +19,7 @@ jobs:
         uses: actions/setup-node@v2
 
       - name: NPM Install
-        run: cd client && npm install
+        run: cd client && npm install --legacy-peer-deps
       
       - name: Build React App
         run: cd client && npm run build

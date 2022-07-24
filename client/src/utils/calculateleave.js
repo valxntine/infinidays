@@ -1,7 +1,8 @@
 import { isWeekend } from "./isweekend";
 
 export const calculateLeave = (careerLevel, currentEvents, userName) => {
-    let output = {}
+    let output = {};
+    const now = new Date();
     const accrualPerPeriod =
         parseInt(careerLevel.split("L")[1]) > 7 ? 7.8 : 9.3;
 
@@ -17,11 +18,19 @@ export const calculateLeave = (careerLevel, currentEvents, userName) => {
 
     let days = 0;
 
-
     for (let event of currentEvents) {
-        const eventDate = new Date(event.event_epoch)
-        if (isWeekend(eventDate.getFullYear(), eventDate.getMonth(), eventDate.getDate())) {
-            continue
+        const eventDate = new Date(event.event_epoch);
+        if (
+            isWeekend(
+                eventDate.getFullYear(),
+                eventDate.getMonth(),
+                eventDate.getDate()
+            ) ||
+            !event.annualLeave ||
+            (eventDate.getMonth() > 8 && now.getMonth() < 8) ||
+            eventDate.getFullYear() > now.getFullYear()
+        ) {
+            continue;
         }
         if (event.user_name === userName) {
             if (event.firstDayHalf || event.lastDayHalf) {
@@ -33,12 +42,12 @@ export const calculateLeave = (careerLevel, currentEvents, userName) => {
         }
     }
 
-    output["daysTaken"] = days
+    output["daysTaken"] = days;
 
     let userHours = days * 7.5;
     const remainingdays = Math.floor((totalHours - userHours) / 7.5);
 
-    output["remainingDays"] = remainingdays
+    output["remainingDays"] = remainingdays;
 
     return output;
 };

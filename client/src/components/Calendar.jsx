@@ -40,8 +40,6 @@ export const Calendar = ({ events, modalHandler }) => {
         return today.toDateString() === d.toDateString();
     };
 
-
-
     const calculateAndSetNumberOfDays = () => {
         let i;
         let daysInMonth = new Date(year, month + 1, 0).getDate();
@@ -87,12 +85,12 @@ export const Calendar = ({ events, modalHandler }) => {
     };
 
     const resetToToday = () => {
-        const now = new Date()
-        const nowMonth = now.getMonth()
-        const nowYear = now.getFullYear()
-        setYear(nowYear)
-        setMonth(nowMonth)
-    }
+        const now = new Date();
+        const nowMonth = now.getMonth();
+        const nowYear = now.getFullYear();
+        setYear(nowYear);
+        setMonth(nowMonth);
+    };
 
     return (
         <>
@@ -157,7 +155,10 @@ export const Calendar = ({ events, modalHandler }) => {
                             style={{ marginBottom: "-30px" }}
                         >
                             {days.map((day) => (
-                                <div key={day} className="px-2 py-2 w-[14.28%] z-50">
+                                <div
+                                    key={day}
+                                    className="px-2 py-2 w-[14.28%] z-50"
+                                >
                                     <div className="text-gray-600 text-sm uppercase tracking-wide font-bold text-center">
                                         {day}
                                     </div>
@@ -175,16 +176,20 @@ export const Calendar = ({ events, modalHandler }) => {
                                 <div
                                     key={index}
                                     className={classNames(
-                                            isWeekend(year, month, date)
+                                        isWeekend(year, month, date)
                                             ? "bg-zinc-200"
                                             : "z-1000",
-                                            isToday(date)
+                                        isToday(date)
                                             ? "border-zinc-800 border-2"
                                             : "",
                                         "px-4 pt-2 border relative h-32 w-[14.28%]"
                                     )}
                                 >
-                                    <div className={"inline-flex w-6 h-6 items-center cursor-default justify-center text-center leading-none rounded-full transition ease-in-out duration-100"}>
+                                    <div
+                                        className={
+                                            "inline-flex w-6 h-6 items-center cursor-default justify-center text-center leading-none rounded-full transition ease-in-out duration-100"
+                                        }
+                                    >
                                         {date}
                                     </div>
                                     <span className="float-right text-xs opacity-30">
@@ -216,29 +221,40 @@ export const Calendar = ({ events, modalHandler }) => {
                                                         date
                                                     ).toDateString()
                                             )
-                                            .map((e) => (
-                                                new Date(e.event_epoch).getDay() === 0 || new Date(e.event_epoch).getDay() === 6 ? "" 
-                                                :
-                                                <div
-                                                    key={`${e.user_name}-${e.event_epoch + (Math.random() * 1000)}`}
-                                                    className={classNames(
-                                                        eventClass(e),
-                                                        e.firstHalfDay ===
-                                                            true
-                                                            ? "w-1/2"
-                                                            : "",
-                                                        e.lastDayHalf ===
-                                                            true
-                                                            ? "w-1/2 ml-auto"
-                                                            : "",
-                                                        "px-1 py-1 rounded-lg overflow-hidden border"
-                                                    )}
-                                                >
-                                                    <p className="text-[0.75em] leading-[0.5em] text-center">
-                                                        {e.pending && "pending"}
-                                                    </p>
-                                                </div>
-                                            ))}
+                                            .map((e) =>
+                                                new Date(
+                                                    e.event_epoch
+                                                ).getDay() === 0 ||
+                                                new Date(
+                                                    e.event_epoch
+                                                ).getDay() === 6 ? (
+                                                    ""
+                                                ) : (
+                                                    <div
+                                                        key={`${e.user_name}-${
+                                                            e.event_epoch +
+                                                            Math.random() * 1000
+                                                        }`}
+                                                        className={classNames(
+                                                            eventClass(e),
+                                                            e.firstHalfDay ===
+                                                                true
+                                                                ? "w-1/2"
+                                                                : "",
+                                                            e.lastDayHalf ===
+                                                                true
+                                                                ? "w-1/2 ml-auto"
+                                                                : "",
+                                                            "px-1 py-1 rounded-lg overflow-hidden border"
+                                                        )}
+                                                    >
+                                                        <p className="text-[0.75em] leading-[0.5em] text-center">
+                                                            {e.pending &&
+                                                                "pending"}
+                                                        </p>
+                                                    </div>
+                                                )
+                                            )}
                                     </div>
                                 </div>
                             ))}
