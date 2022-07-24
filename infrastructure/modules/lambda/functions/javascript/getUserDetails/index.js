@@ -9,10 +9,9 @@ exports.handler = async function (event, context) {
     });
     await client.connect();
 
-    const data = await client.query("SELECT * FROM employee WHERE team_id = $1", [event.queryStringParameters.id])
+    const data = await client.query("SELECT * FROM employee WHERE name = $1", [event.queryStringParameters.name])
     const rows = data.rows
 
     client.end();
     return JSON.stringify({"rows": rows})
 }
-
