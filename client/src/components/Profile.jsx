@@ -26,7 +26,7 @@ export const Profile = ({ user, events }) => {
 
     return (
         <>
-    <div className="max-w-4xl mx-auto sm:px-6 lg:px-8">
+            <div className="max-w-4xl mx-auto sm:px-6 lg:px-8">
                 <div className="px-4 sm:px-0">
                     <div className="container mx-auto py-4 px-6">
                         <div className="bg-white rounded-lg shadow overflow-hidden">
@@ -36,7 +36,8 @@ export const Profile = ({ user, events }) => {
                                         {user.name}
                                     </span>
                                     <span className="text-3xl font-bold text-zinc-600">
-                                        {user.careerLevel}{" - "}
+                                        {user.careerLevel}
+                                        {" - "}
                                         {CareerLevels[user.careerLevel]}
                                     </span>
                                 </div>
@@ -44,22 +45,26 @@ export const Profile = ({ user, events }) => {
                             <div className="flex flex-col px-6 pb-6 items-center">
                                 {avatar}
                                 <div className="flex flex-col w-3/5 justify-between pb-5">
-                                    <p className="text-2xl font-bold text-zinc-600 border-b">Current Project:</p>
-                                    <p className="text-xl font-bold">{user.project}</p>
+                                    <p className="text-2xl font-bold text-zinc-600 border-b">
+                                        Current Project:
+                                    </p>
+                                    <p className="text-xl font-bold">
+                                        {user.project}
+                                    </p>
                                 </div>
                                 <div className="flex flex-col w-3/5 justify-between pb-5">
                                     <p className="text-2xl font-bold text-zinc-600 border-b">
                                         Days of Annual Leave booked:{" "}
-                                        </p>
-                                        <p className="text-xl font-bold">
+                                    </p>
+                                    <p className="text-xl font-bold">
                                         {output.daysTaken}
                                     </p>
                                 </div>
                                 <div className="flex flex-col w-3/5 justify-between pb-5">
                                     <p className="text-2xl font-bold text-zinc-600 border-b">
                                         Days of Annual Leave remaining:{" "}
-                                        </p>
-                                        <p className="text-xl font-bold">
+                                    </p>
+                                    <p className="text-xl font-bold">
                                         {output.remainingDays}
                                     </p>
                                 </div>

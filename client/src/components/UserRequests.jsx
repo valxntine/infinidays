@@ -1,7 +1,4 @@
-import {
-    RefreshIcon,
-    TrashIcon,
-} from "@heroicons/react/solid";
+import { RefreshIcon, TrashIcon } from "@heroicons/react/solid";
 import { useState } from "react";
 import { classNames } from "../utils/classnames";
 import { ConfirmDeleteModal } from "./ConfirmDeleteModal";
@@ -9,15 +6,21 @@ import { NewRequestButton } from "./NewRequestButton";
 
 export const UserRequests = ({ modalHandler, events, user, deleteHandler }) => {
     const [deleteEventModalState, setDeleteEventModalState] = useState(false);
-    const [selectedEvent, setSelectedEvent] = useState(null)
+    const [selectedEvent, setSelectedEvent] = useState(null);
 
     const setModalState = () => {
-        setDeleteEventModalState(!deleteEventModalState)
-    }
+        setDeleteEventModalState(!deleteEventModalState);
+    };
 
     return (
         <>
-        {deleteEventModalState && <ConfirmDeleteModal deleteHandler={deleteHandler} modalHandler={setModalState} selectedEvent={selectedEvent} />}
+            {deleteEventModalState && (
+                <ConfirmDeleteModal
+                    deleteHandler={deleteHandler}
+                    modalHandler={setModalState}
+                    selectedEvent={selectedEvent}
+                />
+            )}
             <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div className="px-4 sm:px-0">
                     <div className="container mx-auto py-4 px-6">
@@ -79,11 +82,17 @@ export const UserRequests = ({ modalHandler, events, user, deleteHandler }) => {
                                                             : "APPROVED"}
                                                     </span>
                                                     <div className="flex justify-center align-center rounded-lg ml-2 border ">
-                                                        <button className="leading-none rounded-lg transition ease-in-out duration-100 inline-flex cursor-pointer text-white hover:bg-gray-200 p-1 items-center focus:outline-none"
-                                                        onClick={() => {
-                                                        setSelectedEvent(e)
-                                                        setDeleteEventModalState(!deleteEventModalState)}
-                                                        }>
+                                                        <button
+                                                            className="leading-none rounded-lg transition ease-in-out duration-100 inline-flex cursor-pointer text-white hover:bg-gray-200 p-1 items-center focus:outline-none"
+                                                            onClick={() => {
+                                                                setSelectedEvent(
+                                                                    e
+                                                                );
+                                                                setDeleteEventModalState(
+                                                                    !deleteEventModalState
+                                                                );
+                                                            }}
+                                                        >
                                                             <TrashIcon className="h-5 w-5 inline-flex leading-none text-gray-500" />
                                                         </button>
                                                     </div>

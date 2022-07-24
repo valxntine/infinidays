@@ -127,22 +127,22 @@ export default function Example() {
             annualLeave: true,
         },
     ]);
-    
+
     const addEvent = (event) => {
-        setEvents(curr => [...curr, event])
-    }
+        setEvents((curr) => [...curr, event]);
+    };
 
     const deleteEvent = (id) => {
-        let currEvents = [...events]
-        const newEvents = currEvents.filter((e) => e.id !== id)
-        setEvents(newEvents)
-    }
+        let currEvents = [...events];
+        const newEvents = currEvents.filter((e) => e.id !== id);
+        setEvents(newEvents);
+    };
 
     const [expandedEvents, setExpandedEvents] = useState([]);
 
     useEffect(() => {
-        setExpandedEvents(curr => [...getDatesInRange(events)])
-    }, [events])
+        setExpandedEvents((curr) => [...getDatesInRange(events)]);
+    }, [events]);
 
     const setModalState = () => {
         setModal(!modal);
