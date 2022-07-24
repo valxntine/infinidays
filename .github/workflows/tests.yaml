@@ -16,6 +16,6 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v2
       - name: NPM install
-        run: cd client && npm install
+        run: cd client && npm install --legacy-peer-deps
       - name: Run Tests
         run: cd client && npm run test -- --watchAll=false
