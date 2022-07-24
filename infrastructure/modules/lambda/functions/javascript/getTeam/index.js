@@ -9,7 +9,7 @@ exports.handler = async function (event, context) {
     });
     await client.connect();
 
-    const data = await client.query("SELECT * FROM users")
+    const data = await client.query("SELECT * FROM employee WHERE team_id = $1", [event.queryStringParameters.id])
     const rows = await data.rows
 
     client.end();
