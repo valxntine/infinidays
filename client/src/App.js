@@ -1,41 +1,61 @@
-import { useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { Navbar } from "./components/Navbar";
 import { Dashboard } from "./components/Dashboard";
 import { MyRequests } from "./components/MyRequests";
 import { Profile } from "./components/Profile";
 import { getDatesInRange } from "./utils/getrangeofdates";
+import { useQuery } from "react-query";
+import { getUserDetails } from "./db/getUserDetails";
+import { getTeam } from "./db/getTeam";
+import { getUserTeam } from "./db/getUserTeam";
+    
+export const UserContext = createContext()
 
 export default function Example() {
+    const userData = useQuery("user", () => getUserDetails(loggedInUser.name))
+
+    if (userData.isError) {
+        console.error(userData.error)
+    }
+
+    if (userData.isLoading) {
+        console.log("Loading user data...")
+    }
+   
+    if (!userData.data) {
+        console.log("Waiting for data...")
+    }
+
+    const userTeamId = userData.data?.team_id
+
+    const teamData = useQuery(["team", userTeamId], () => getTeam(userTeamId), {
+        enabled: !!userTeamId,
+        refetchOnWindowFocus: false,
+        onSuccess: data => {
+            setTeamMembers(data)
+            setExpandedEvents((curr) => [...getDatesInRange(events, data)]);
+        }
+    })
+
+    if (teamData.isError) {
+        console.error(teamData.error)
+    }
+
+    if (teamData.isLoading) {
+        console.log("Loading team data...")
+    }
+
+    const userTeam = useQuery(["userTeam", teamId], () => getUserTeam(teamId))
+    
+    
+
     const [modal, setModal] = useState(false);
-    const [teamMembers, setTeamMembers] = useState([
-        {
-            user_name: "Phoebe Gash",
-            event_theme: "red",
-        },
-        {
-            user_name: "Valentine Bott",
-            event_theme: "purple",
-        },
-        {
-            user_name: "Ron Kulbin",
-            event_theme: "blue",
-        },
-        {
-            user_name: "Shaw Malcom",
-            event_theme: "green",
-        },
-        {
-            user_name: "Ria Kinsley",
-            event_theme: "yellow",
-        },
-    ]);
-    const [user, setUser] = useState({
+    const [loggedInUser, setLoggedInUser] = useState({
         name: "Valentine Bott",
-        project: "Dojo",
-        color: "purple",
-        careerLevel: "CL9",
-    });
+        email: "valentine.bott@infinityworks.com"
+    })
+    const [teamMembers, setTeamMembers] = useState([]);
     const [events, setEvents] = useState([
         {
             id: 1,
@@ -140,9 +160,9 @@ export default function Example() {
 
     const [expandedEvents, setExpandedEvents] = useState([]);
 
-    useEffect(() => {
-        setExpandedEvents((curr) => [...getDatesInRange(events)]);
-    }, [events]);
+    // useEffect(() => {
+    //     setExpandedEvents((curr) => [...getDatesInRange(events, teamData.data)]);
+    // }, [events, teamData.data]);
 
     const setModalState = () => {
         setModal(!modal);
@@ -151,12 +171,13 @@ export default function Example() {
         <>
             <div className="min-h-screen">
                 <Router>
-                    <Navbar user={user} />
+                <UserContext.Provider value={userData}>
+                    <Navbar />
                     <Routes>
                         <Route
                             path="/profile"
                             element={
-                                <Profile user={user} events={expandedEvents} />
+                                <Profile events={expandedEvents} />
                             }
                         />
                         <Route
@@ -165,7 +186,6 @@ export default function Example() {
                                 <MyRequests
                                     modalHandler={setModalState}
                                     modal={modal}
-                                    user={user}
                                     events={events}
                                     deleteHandler={deleteEvent}
                                     setExpandedEvents={setExpandedEvents}
@@ -182,13 +202,13 @@ export default function Example() {
                                     modalHandler={setModalState}
                                     modal={modal}
                                     team={teamMembers}
-                                    user={user}
                                     setExpandedEvents={setExpandedEvents}
                                     addEventHandler={addEvent}
                                 />
                             }
                         />
                     </Routes>
+                </UserContext.Provider>
                 </Router>
             </div>
         </>
