@@ -25,6 +25,7 @@ export const Dashboard = ({
                         events={events}
                         expandedEvents={expandedEvents}
                         addEventHandler={addEventHandler}
+                        team={team}
                     />
                 )}
                 <header className="bg-white shadow">

@@ -9,7 +9,7 @@ import { generateRandomAvatarOptions } from "../utils/randomavatar";
 import { useEffect, useState, useContext } from "react";
 import { UserContext } from "../App";
 
-export const Profile = ({ events, teams }) => {
+export const Profile = ({ events, team }) => {
     const { data: user } = useContext(UserContext);
     const [avatar, setAvatar] = useState(null);
 
@@ -51,7 +51,7 @@ export const Profile = ({ events, teams }) => {
                                             Current Project:
                                         </p>
                                         <p className="text-xl font-bold">
-                                            {user.project}
+                                            {team}
                                         </p>
                                     </div>
                                     <div className="flex flex-col w-3/5 justify-between pb-5">

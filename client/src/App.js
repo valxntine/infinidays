@@ -9,6 +9,7 @@ import { useQuery } from "react-query";
 import { getUserDetails } from "./db/getUserDetails";
 import { getTeam } from "./db/getTeam";
 import { getUserTeam } from "./db/getUserTeam";
+import { EventThemes } from "./utils/colors";
     
 export const UserContext = createContext()
 
@@ -33,8 +34,16 @@ export default function Example() {
         enabled: !!userTeamId,
         refetchOnWindowFocus: false,
         onSuccess: data => {
-            setTeamMembers(data)
-            setExpandedEvents((curr) => [...getDatesInRange(events, data)]);
+            let currentData = [...data]
+            const availableColors = [...EventThemes].filter(c => c !== userData.data.event_theme.toLowerCase())
+            for(let i in currentData) {
+                if (currentData[i].name === userData.data.name) {
+                    continue
+                }
+                currentData[i].event_theme = availableColors[i]
+            } 
+            setTeamMembers(currentData)
+            setExpandedEvents((curr) => [...getDatesInRange(events, currentData)]);
         }
     })
 
@@ -46,10 +55,16 @@ export default function Example() {
         console.log("Loading team data...")
     }
 
-    const userTeam = useQuery(["userTeam", teamId], () => getUserTeam(teamId))
+    const userTeam = useQuery(["userTeam", userTeamId], () => getUserTeam(userTeamId), {
+        enabled: !!userTeamId,
+        refetchOnWindowFocus: false,
+        onSuccess: data => {
+            setTeamName(data.name)
+        }
+    })
     
     
-
+    const [teamName, setTeamName] = useState("")
     const [modal, setModal] = useState(false);
     const [loggedInUser, setLoggedInUser] = useState({
         name: "Valentine Bott",
@@ -177,7 +192,7 @@ export default function Example() {
                         <Route
                             path="/profile"
                             element={
-                                <Profile events={expandedEvents} />
+                                <Profile team={teamName} events={expandedEvents} />
                             }
                         />
                         <Route
