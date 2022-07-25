@@ -53,3 +53,19 @@ module "getUserTeam" {
     DB_PORT     = module.postgres.port
   }
 }
+
+module "getTeamRequests" {
+  source = "./modules/lambda"
+
+  network_configuration = module.network.network_config
+  name                  = "getTeamRequests"
+  memory                = 512
+  timeout_seconds       = 5 * 60
+  environment = {
+    DB_HOST     = module.postgres.host
+    DB_USERNAME = module.postgres.username
+    DB_PASSWORD = module.postgres.db_pass
+    DB_NAME     = module.postgres.db_name
+    DB_PORT     = module.postgres.port
+  }
+}
