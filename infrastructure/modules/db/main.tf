@@ -11,7 +11,7 @@ resource "aws_db_instance" "main" {
   db_name = "infinidays"
   username = "postgres"
   password = random_password.main.result
-  publicly_accessible = false
+  publicly_accessible = true
 }
 
 output "db_pass" {
