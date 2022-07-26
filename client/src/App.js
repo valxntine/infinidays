@@ -1,132 +1,112 @@
-import { useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { Navbar } from "./components/Navbar";
 import { Dashboard } from "./components/Dashboard";
 import { MyRequests } from "./components/MyRequests";
 import { Profile } from "./components/Profile";
-import { getDatesInRange } from "./utils/getrangeofdates";
+import { useQuery } from "react-query";
+import { getUserDetails } from "./db/getUserDetails";
+import { getTeam } from "./db/getTeam";
+import { getUserTeam } from "./db/getUserTeam";
+import { EventThemes } from "./utils/colors";
+import { getTeamRequests } from "./db/getTeamRequests";
+
+export const UserContext = createContext();
+export const RequestContext = createContext();
+export const TeamContext = createContext();
 
 export default function Example() {
-    const [modal, setModal] = useState(false);
-    const [teamMembers, setTeamMembers] = useState([
-        {
-            user_name: "Phoebe Gash",
-            event_theme: "red",
-        },
-        {
-            user_name: "Valentine Bott",
-            event_theme: "purple",
-        },
-        {
-            user_name: "Ron Kulbin",
-            event_theme: "blue",
-        },
-        {
-            user_name: "Shaw Malcom",
-            event_theme: "green",
-        },
-        {
-            user_name: "Ria Kinsley",
-            event_theme: "yellow",
-        },
-    ]);
-    const [user, setUser] = useState({
-        name: "Valentine Bott",
-        project: "Dojo",
-        color: "purple",
-        careerLevel: "CL9",
-    });
-    const [events, setEvents] = useState([
-        {
-            id: 1,
-            event_start_date: Date.UTC(2022, 6, 4),
-            event_end_date: Date.UTC(2022, 6, 4),
-            user_name: "Phoebe Gash",
-            event_theme: "red",
-            pending: true,
-            firstHalfDay: true,
-            lastDayHalf: null,
-            annualLeave: true,
-        },
+    const userData = useQuery("user", () => getUserDetails(loggedInUser.name));
 
-        {
-            id: 2,
-            event_start_date: Date.UTC(2022, 6, 4),
-            event_end_date: Date.UTC(2022, 6, 4),
-            user_name: "Valentine Bott",
-            event_theme: "purple",
-            pending: false,
-            firstHalfDay: null,
-            lastDayHalf: null,
-            annualLeave: true,
+    if (userData.isError) {
+        console.error(userData.error);
+    }
+
+    if (userData.isLoading) {
+        console.log("Loading user data...");
+    }
+
+    if (!userData.data) {
+        console.log("Waiting for data...");
+    }
+
+    const userTeamId = userData.data?.team_id;
+
+    const teamData = useQuery(["team", userTeamId], () => getTeam(userTeamId), {
+        enabled: !!userTeamId,
+        refetchOnWindowFocus: false,
+        onSuccess: (data) => {
+            let currentData = [...data];
+            const availableColors = [...EventThemes].filter(
+                (c) => c !== userData.data.event_theme.toLowerCase()
+            );
+            for (let i in currentData) {
+                if (currentData[i].name === userData.data.name) {
+                    continue;
+                }
+                currentData[i].event_theme = availableColors[i];
+            }
+            setTeamMembers(currentData);
         },
+    });
+
+    if (teamData.isError) {
+        console.error(teamData.error);
+    }
+
+    if (teamData.isLoading) {
+        console.log("Loading team data...");
+    }
+
+    const teamDataOk = teamData?.data;
+
+    const userTeam = useQuery(
+        ["userTeam", userTeamId],
+        () => getUserTeam(userTeamId),
         {
-            id: 3,
-            event_start_date: Date.UTC(2022, 8, 12),
-            event_end_date: Date.UTC(2022, 8, 12),
-            user_name: "Valentine Bott",
-            event_theme: "purple",
-            pending: false,
-            firstHalfDay: null,
-            lastDayHalf: null,
-            annualLeave: true,
-        },
+            enabled: !!teamDataOk,
+            refetchOnWindowFocus: false,
+            onSuccess: (data) => {
+                setTeamName(data.name);
+            },
+        }
+    );
+
+    if (userTeam.isError) {
+        console.error(teamData.error);
+    }
+
+    if (userTeam.isLoading) {
+        console.log("Loading user team...");
+    }
+
+    const userTeamOk = userTeam?.data;
+
+    const teamRequests = useQuery(
+        ["teamRequests", userTeamId],
+        () => getTeamRequests(userTeamId),
         {
-            id: 4,
-            event_start_date: Date.UTC(2022, 11, 18),
-            event_end_date: Date.UTC(2022, 11, 22),
-            user_name: "Valentine Bott",
-            event_theme: "purple",
-            pending: true,
-            firstHalfDay: null,
-            lastDayHalf: null,
-            annualLeave: true,
-        },
-        {
-            id: 5,
-            event_start_date: Date.UTC(2022, 3, 4),
-            event_end_date: Date.UTC(2022, 3, 4),
-            user_name: "Valentine Bott",
-            event_theme: "purple",
-            pending: false,
-            firstHalfDay: null,
-            lastDayHalf: null,
-            annualLeave: true,
-        },
-        {
-            id: 6,
-            event_start_date: Date.UTC(2022, 6, 4),
-            event_end_date: Date.UTC(2022, 6, 4),
-            user_name: "Ron Kulbin",
-            event_theme: "blue",
-            pending: true,
-            firstHalfDay: null,
-            lastDayHalf: true,
-            annualLeave: true,
-        },
-        {
-            id: 7,
-            event_start_date: Date.UTC(2022, 6, 25),
-            event_end_date: Date.UTC(2022, 6, 25),
-            user_name: "Shaw Malcom",
-            event_theme: "green",
-            pending: false,
-            firstHalfDay: null,
-            lastDayHalf: null,
-            annualLeave: true,
-        },
-        {
-            id: 8,
-            event_start_date: Date.UTC(2022, 6, 31),
-            event_end_date: Date.UTC(2022, 6, 31),
-            user_name: "Ria Kinsley",
-            event_theme: "yellow",
-            pending: false,
-            firstHalfDay: null,
-            lastDayHalf: true,
-            annualLeave: true,
-        },
-    ]);
+            enabled: !!userTeamOk,
+            onSuccess: data => setEvents(data)
+        }
+    );
+
+    if (teamRequests.isError) {
+        console.error(teamData.error);
+    }
+
+    if (teamRequests.isLoading) {
+        console.log("Loading user team...");
+    }
+
+    const [teamName, setTeamName] = useState("");
+    const [modal, setModal] = useState(false);
+    const [loggedInUser, setLoggedInUser] = useState({
+        name: "Valentine Bott",
+        email: "valentine.bott@infinityworks.com",
+    });
+    const [teamMembers, setTeamMembers] = useState([]);
+    const [events, setEvents] = useState([]);
 
     const addEvent = (event) => {
         setEvents((curr) => [...curr, event]);
@@ -140,9 +120,9 @@ export default function Example() {
 
     const [expandedEvents, setExpandedEvents] = useState([]);
 
-    useEffect(() => {
-        setExpandedEvents((curr) => [...getDatesInRange(events)]);
-    }, [events]);
+    // useEffect(() => {
+    //     setExpandedEvents((curr) => [...getDatesInRange(events, teamData.data)]);
+    // }, [events, teamData.data]);
 
     const setModalState = () => {
         setModal(!modal);
@@ -151,44 +131,56 @@ export default function Example() {
         <>
             <div className="min-h-screen">
                 <Router>
-                    <Navbar user={user} />
-                    <Routes>
-                        <Route
-                            path="/profile"
-                            element={
-                                <Profile user={user} events={expandedEvents} />
-                            }
-                        />
-                        <Route
-                            path="/requests"
-                            element={
-                                <MyRequests
-                                    modalHandler={setModalState}
-                                    modal={modal}
-                                    user={user}
-                                    events={events}
-                                    deleteHandler={deleteEvent}
-                                    setExpandedEvents={setExpandedEvents}
-                                    expandedEvents={expandedEvents}
-                                    addEventHandler={addEvent}
-                                />
-                            }
-                        />
-                        <Route
-                            path="/"
-                            element={
-                                <Dashboard
-                                    expandedEvents={expandedEvents}
-                                    modalHandler={setModalState}
-                                    modal={modal}
-                                    team={teamMembers}
-                                    user={user}
-                                    setExpandedEvents={setExpandedEvents}
-                                    addEventHandler={addEvent}
-                                />
-                            }
-                        />
-                    </Routes>
+                    <UserContext.Provider value={userData}>
+                        <TeamContext.Provider value={teamData}>
+                            <RequestContext.Provider value={teamRequests}>
+                                <Navbar />
+                                <Routes>
+                                    <Route
+                                        path="/profile"
+                                        element={
+                                            <Profile
+                                                team={teamName}
+                                                teamMembers={teamData.data}
+                                            />
+                                        }
+                                    />
+                                    <Route
+                                        path="/requests"
+                                        element={
+                                            <MyRequests
+                                                modalHandler={setModalState}
+                                                modal={modal}
+                                                events={events}
+                                                deleteHandler={deleteEvent}
+                                                setExpandedEvents={
+                                                    setExpandedEvents
+                                                }
+                                                expandedEvents={expandedEvents}
+                                                addEventHandler={addEvent}
+                                            />
+                                        }
+                                    />
+                                    <Route
+                                        path="/"
+                                        element={
+                                            <Dashboard
+                                                expandedEvents={expandedEvents}
+                                                modalHandler={setModalState}
+                                                modal={modal}
+                                                team={teamMembers}
+                                                teamData={teamData}
+                                                setExpandedEvents={
+                                                    setExpandedEvents
+                                                }
+                                                addEventHandler={addEvent}
+                                            />
+                                        }
+                                    />
+                                </Routes>
+                            </RequestContext.Provider>
+                        </TeamContext.Provider>
+                    </UserContext.Provider>
                 </Router>
             </div>
         </>

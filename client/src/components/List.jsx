@@ -1,6 +1,6 @@
 import React from "react";
 import { useQuery } from "react-query";
-import { getTeams } from "../db/getTeams";
+import { getTeams } from "../db/getTeam";
 
 const List = () => {
     const { isLoading, isError, data, error } = useQuery("team", getTeams);

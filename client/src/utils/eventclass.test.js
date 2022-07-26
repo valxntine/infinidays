@@ -53,13 +53,3 @@ test("when the event theme is orange and is not pending, classes with border, te
         "border-orange-400 text-orange-800 bg-orange-300"
     );
 });
-
-test("when the event theme is a colour other than blue, red, yellow, green or orange, purple is used as the event_theme, and is not pending, classes with border, text and background with purple colour are returned", () => {
-    const event = {
-        pending: false,
-        event_theme: "cyan",
-    };
-    expect(eventClass(event)).toBe(
-        "border-purple-400 text-purple-800 bg-purple-300"
-    );
-});
