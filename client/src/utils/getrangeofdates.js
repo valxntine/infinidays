@@ -1,15 +1,17 @@
-export const getDatesInRange = (events, team) => {
+export const getDatesInRange = (events, team, user) => {
     const expandedData = [];
     console.log(team)
+    console.log(events)
 
     for (let event of events) {
-        let date = event.event_start_date;
-        while (date <= event.event_end_date) {
+        let date = new Date(event.start_date).getTime();
+        let endDate = new Date(event.end_date).getTime()
+        while (date <= endDate) {
             expandedData.push({
-                id: Math.random() * 10,
+                request_id: event.id,
                 event_epoch: date,
                 ...event,
-                event_theme: team.find(m => m.name === event.user_name).event_theme.toLowerCase(),
+                event_theme: team.find(m => m.name === event.employee_name).event_theme.toLowerCase(),
             });
             date = date + 86400000;
         }

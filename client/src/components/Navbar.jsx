@@ -14,7 +14,6 @@ const navigation = [
 export const Navbar = () => {
     const { data } = useContext(UserContext);
     if (data) {
-        console.log(data)
         return (
             <Disclosure as="nav" className="bg-zinc-800">
                 {({ open }) => (

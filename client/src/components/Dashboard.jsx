@@ -6,6 +6,7 @@ import { useContext } from "react";
 import { UserContext } from "../App";
 
 export const Dashboard = ({
+    teamData,
     expandedEvents,
     events,
     modal,
@@ -64,6 +65,7 @@ export const Dashboard = ({
                     <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                         <div className="px-4 sm:px-0">
                             <Calendar
+                            teamData={teamData}
                                 events={expandedEvents}
                                 modalHandler={modalHandler}
                             />

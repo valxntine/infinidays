@@ -47,11 +47,11 @@ export const UserRequests = ({ modalHandler, events, user, deleteHandler }) => {
                                 {events
                                     .sort(
                                         (a, b) =>
-                                            a.event_start_date -
-                                            b.event_start_date
+                                            a.start_date -
+                                            b.start_date
                                     )
                                     .filter((e) => {
-                                        return e.user_name === user.name;
+                                        return e.employee_name === user.name;
                                     })
                                     .map((e) => {
                                         return (
@@ -67,11 +67,11 @@ export const UserRequests = ({ modalHandler, events, user, deleteHandler }) => {
                                                 <div>
                                                     <span>
                                                         {new Date(
-                                                            e.event_start_date
+                                                            e.start_date
                                                         ).toDateString()}
                                                         {" - "}
                                                         {new Date(
-                                                            e.event_end_date
+                                                            e.end_date
                                                         ).toDateString()}
                                                     </span>
                                                 </div>

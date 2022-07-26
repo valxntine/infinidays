@@ -8,7 +8,8 @@ import { classNames } from "../utils/classnames";
 import { eventClass } from "../utils/eventclass";
 import { isWeekend } from "../utils/isweekend";
 import { NewRequestButton } from "./NewRequestButton";
-import { UserContext } from "../App";
+import { RequestContext, TeamContext, UserContext } from "../App";
+import { getDatesInRange } from "../utils/getrangeofdates";
 
 const monthNames = [
     "January",
@@ -27,7 +28,7 @@ const monthNames = [
 
 const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-export const Calendar = ({ events, modalHandler }) => {
+export const Calendar = ({ modalHandler, teamData }) => {
     const date = new Date();
     const [month, setMonth] = useState(date.getMonth());
     const [year, setYear] = useState(date.getFullYear());
@@ -94,7 +95,10 @@ export const Calendar = ({ events, modalHandler }) => {
     };
 
     const { data: user } = useContext(UserContext);
-    if (user) {
+    const { data: requests } = useContext(RequestContext)
+    const { data: team } = useContext(TeamContext)
+    if (user && requests && team) {
+        const events = getDatesInRange(requests, team, user)
         return (
             <>
                 <div className="container mx-auto py-4 px-6">
