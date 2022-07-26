@@ -1,4 +1,4 @@
-export const getDatesInRange = (events, team, user) => {
+export const getDatesInRange = (events, team) => {
     const expandedData = [];
     console.log(team)
     console.log(events)

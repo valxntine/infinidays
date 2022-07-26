@@ -7,13 +7,14 @@ import { isWeekend } from "../utils/isweekend";
 import Avatar from "avataaars";
 import { generateRandomAvatarOptions } from "../utils/randomavatar";
 import { useEffect, useState, useContext } from "react";
-import { UserContext } from "../App";
+import { RequestContext, UserContext } from "../App";
+import { getDatesInRange } from "../utils/getrangeofdates";
 
-export const Profile = ({ events, team }) => {
+export const Profile = ({ team, teamMembers }) => {
     const { data: user } = useContext(UserContext);
+    const { data: requests } = useContext(RequestContext)
     const [avatar, setAvatar] = useState(null);
 
-    const output = calculateLeave(user.career_level, events, user.name);
 
     useEffect(() => {
         setAvatar(
@@ -24,8 +25,11 @@ export const Profile = ({ events, team }) => {
             />
         );
     }, []);
-    if (user) {
+    if (user && requests) {
+        const events = getDatesInRange(requests, teamMembers, user)
+    const output = calculateLeave(user.career_level, events, user.name);
         console.log(user)
+        console.log(events)
         return (
             <>
                 <div className="max-w-4xl mx-auto sm:px-6 lg:px-8">

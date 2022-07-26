@@ -4,7 +4,6 @@ import { Navbar } from "./components/Navbar";
 import { Dashboard } from "./components/Dashboard";
 import { MyRequests } from "./components/MyRequests";
 import { Profile } from "./components/Profile";
-import { getDatesInRange } from "./utils/getrangeofdates";
 import { useQuery } from "react-query";
 import { getUserDetails } from "./db/getUserDetails";
 import { getTeam } from "./db/getTeam";
@@ -142,7 +141,7 @@ export default function Example() {
                                         element={
                                             <Profile
                                                 team={teamName}
-                                                events={expandedEvents}
+                                                teamMembers={teamData.data}
                                             />
                                         }
                                     />

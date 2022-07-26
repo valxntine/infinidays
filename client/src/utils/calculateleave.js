@@ -26,14 +26,14 @@ export const calculateLeave = (careerLevel, currentEvents, userName) => {
                 eventDate.getMonth(),
                 eventDate.getDate()
             ) ||
-            !event.annualLeave ||
+            !event.annual_leave ||
             (eventDate.getMonth() > 8 && now.getMonth() < 8) ||
             eventDate.getFullYear() > now.getFullYear()
         ) {
             continue;
         }
-        if (event.user_name === userName) {
-            if (event.firstDayHalf || event.lastDayHalf) {
+        if (event.employee_name === userName) {
+            if (event.first_day_half || event.last_day_half) {
                 days += 0.5;
                 console.log("adding half day for: ", event);
             } else {
