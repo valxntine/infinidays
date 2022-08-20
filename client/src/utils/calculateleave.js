@@ -16,6 +16,7 @@ export const calculateLeave = (careerLevel, currentEvents, userName) => {
     // TODO: then do the number of periods left in the year * accrualPerPeriod - amount of time already taken (current events)
     // TODO: / 7.5 to get the amount of days remaining. I think that's everything?
 
+    const endOfYear = new Date(now.getFullYear(), 8, 1)
     let days = 0;
 
     for (let event of currentEvents) {
@@ -27,8 +28,7 @@ export const calculateLeave = (careerLevel, currentEvents, userName) => {
                 eventDate.getDate()
             ) ||
             !event.annual_leave ||
-            (eventDate.getMonth() > 8 && now.getMonth() < 8) ||
-            eventDate.getFullYear() > now.getFullYear()
+            eventDate >= endOfYear 
         ) {
             continue;
         }
